@@ -1,6 +1,6 @@
 # Yii2 image cutter
 
-This is a for [Patroklo/yii2-widget-upload-crop](https://github.com/Patroklo/yii2-widget-upload-crop)
+This is a fork [Patroklo/yii2-widget-upload-crop](https://github.com/Patroklo/yii2-widget-upload-crop)
 
 #### Features:
 - Upload image
