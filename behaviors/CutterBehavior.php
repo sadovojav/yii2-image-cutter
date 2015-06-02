@@ -61,6 +61,8 @@ class CutterBehavior extends AttributeBehavior
 
             $this->owner->{$this->attribute} = $this->baseDir . DIRECTORY_SEPARATOR . $croppingFileName
                 . $croppingFileExt;
+        } elseif ($this->owner->oldAttributes[$this->attribute]) {
+            $this->owner->{$this->attribute} = $this->owner->oldAttributes[$this->attribute];
         }
     }
 
