@@ -6,7 +6,6 @@ use Yii;
 use yii\imagine\Image;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
-use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 
@@ -14,7 +13,7 @@ use yii\web\UploadedFile;
  * Class CutterBehavior
  * @package sadovojav\cutter\behavior
  */
-class CutterBehavior extends AttributeBehavior
+class CutterBehavior extends \yii\behaviors\AttributeBehavior
 {
     public $attribute;
 
