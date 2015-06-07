@@ -6,6 +6,7 @@ This is a fork [Patroklo/yii2-widget-upload-crop](https://github.com/Patroklo/yi
 - Upload image
 - Crop image
 - Use Imagine
+- Cache sorting to subdirectories
 
 ### Composer
 
@@ -29,7 +30,8 @@ or add ```"sadovojav/yii2-image-cutter": "dev-master"``` to the require section 
                 'class' => CutterBehavior::className(),
                 'attribute' => 'image',
                 'baseDir' => '/uploads/content/crop',
-                'basePath' => '@webroot'
+                'basePath' => '@webroot',
+                'quality' => 100 //default 92
             ],
         ]
     }
