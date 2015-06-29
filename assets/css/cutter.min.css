@@ -1,1 +1,1 @@
-.col-centered{margin-left:auto;margin-right:auto;width:100%}.img-centered{margin-left:auto;margin-right:auto}#preview-pane{z-index:2000;padding:6px 0}#preview-pane .preview-container{overflow:hidden}.preview_image{display:block!important;width:100%;max-width:100%}.uploadcrop h2{margin:0;}
+.preview-pane{padding:10px 0}.preview-pane .preview-container{overflow:hidden}.preview-pane .preview-image{display:block!important;width:100%;max-width:100%}.icon-flipped{transform:scaleX(-1);-moz-transform:scaleX(-1);-webkit-transform:scaleX(-1);-ms-transform:scaleX(-1)}

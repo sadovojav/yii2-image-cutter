@@ -74,14 +74,22 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
 
             $cropping = $_POST[$this->attribute . '-cropping'];
 
-            $image = Image::getImagine()->open($uploadImage->tempName);
-            $point = new Point($cropping['x'], $cropping['y']);
-            $box = new Box($cropping['width'], $cropping['height']);
+            $imageTmp = Image::getImagine()->open($uploadImage->tempName);
+            $imageTmp->rotate($cropping['dataRotate']);
+
+            $image = Image::getImagine()->create($imageTmp->getSize());
+            $image->paste($imageTmp, new Point(0, 0));
+
+            $point = new Point($cropping['dataX'], $cropping['dataY']);
+            $box = new Box($cropping['dataWidth'], $cropping['dataHeight']);
+
             $image->crop($point, $box);
             $image->save($croppingFile, ['quality' => $this->quality]);
 
             $this->owner->{$this->attribute} = $this->baseDir . DIRECTORY_SEPARATOR . $croppingFileDir
                 . DIRECTORY_SEPARATOR . $croppingFileName . $croppingFileExt;
+        } elseif (isset($_POST[$this->attribute . '-remove']) && $_POST[$this->attribute . '-remove']) {
+            $this->delete();
         } elseif (isset($this->owner->oldAttributes[$this->attribute])) {
             $this->owner->{$this->attribute} = $this->owner->oldAttributes[$this->attribute];
         }

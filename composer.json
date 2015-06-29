@@ -1,6 +1,6 @@
 {
   "name": "sadovojav/yii2-image-cutter",
-  "description": "Crop image widget.",
+  "description": "Crop image widget",
   "version": "1.0.0.0",
   "type": "yii2-extension",
   "keywords": [
