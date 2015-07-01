@@ -18,19 +18,26 @@ class Cutter extends \yii\widgets\InputWidget
     public $imageOptions;
 
     /** @var array */
-    public $jcropOptions = [
+    public $jcropOptions = [];
+
+    /** @var array */
+    public $defaultJcropOptions = [
         'rotatable' => true,
         'zoomable' => true,
         'movable' => true,
     ];
 
-    /**
-     * Renders the field.
-     */
-    public function run()
+    public function init()
     {
+        parent::init();
+
         $this->registerTranslations();
 
+        $this->jcropOptions = array_merge($this->jcropOptions, $this->defaultJcropOptions);
+    }
+
+    public function run()
+    {
         if (is_null($this->imageOptions)) {
             $this->imageOptions = [
                 'class' => 'img-responsive',
