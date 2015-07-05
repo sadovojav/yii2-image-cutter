@@ -33,7 +33,6 @@ or add ```"sadovojav/yii2-image-cutter": "dev-master"``` to the require section 
                 'attribute' => 'image',
                 'baseDir' => '/uploads/crop',
                 'basePath' => '@webroot',
-                'quality' => 100 //default 92
             ],
         ]
     }
@@ -45,6 +44,12 @@ or add ```"sadovojav/yii2-image-cutter": "dev-master"``` to the require section 
         ];
     }
 ```
+
+#### Parameters
+- integer `attribute` required - Image attribute
+- integer `baseDir` required - Base directory
+- integer `basePath` required - Base path
+- integer `quality` =  `92` - Crop result quality
 
 * Use in view
 > Without client validation
