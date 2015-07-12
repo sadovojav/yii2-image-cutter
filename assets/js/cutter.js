@@ -5,6 +5,7 @@ $.fn.cutter = function (options) {
 
     var $inputField = options['inputField'];
     var $jcropOptions = options['jcropOptions'];
+    var $useWindowHeight = options['useWindowHeight'];
 
     var $cutter = $('#' + $inputField + '-cutter');
     var $modal = $cutter.find('.modal');
@@ -192,6 +193,10 @@ $.fn.cutter = function (options) {
             if (height < minHeight) {
                 height = minHeight;
             }
+        }
+
+        if ($useWindowHeight) {
+            height = $(window).height() - 300;
         }
 
         return {

@@ -82,6 +82,9 @@ or
 * attribute (string) (obligatory)
 > Defines the model attribute that will be used to make de form input field.
 
+* useWindowHeight (bool) (optional)
+> Use the height of the current window for the form image cropping
+
 * imageOptions (array) (optional)
 > List with options that will be added to the image field that will be used to define the crop data in the modal. The format should be ['option' => 'value'].
 

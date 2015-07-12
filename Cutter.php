@@ -14,13 +14,24 @@ use yii\helpers\Json;
  */
 class Cutter extends \yii\widgets\InputWidget
 {
-    /** @var array */
+    /**
+     * @var
+     */
     public $imageOptions;
 
-    /** @var array */
+    /**
+     * @var bool
+     */
+    public $useWindowHeight = true;
+
+    /**
+     * @var array
+     */
     public $jcropOptions = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     public $defaultJcropOptions = [
         'rotatable' => true,
         'zoomable' => true,
@@ -120,14 +131,15 @@ class Cutter extends \yii\widgets\InputWidget
 
         CutterAsset::register($view);
 
-        $jcropOptions = [
+        $options = [
             'inputField' => $inputField,
+            'useWindowHeight' => $this->useWindowHeight,
             'jcropOptions' => $this->jcropOptions
         ];
 
-        $jcropOptions = Json::encode($jcropOptions);
+        $options = Json::encode($options);
 
-        $view->registerJs('jQuery("#' . $inputField . '").cutter(' . $jcropOptions . ');');
+        $view->registerJs('jQuery("#' . $inputField . '").cutter(' . $options . ');');
     }
 
     public function registerTranslations()
