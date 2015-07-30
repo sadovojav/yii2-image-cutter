@@ -18,7 +18,12 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
     /**
      * @var
      */
-    public $attribute;
+    public $attribute = null;
+
+    /**
+     * @var
+     */
+    public $attributes = [];
 
     /**
      * @var
@@ -41,17 +46,28 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
     public function events()
     {
         return [
-            ActiveRecord::EVENT_BEFORE_INSERT => 'upload',
-            ActiveRecord::EVENT_BEFORE_UPDATE => 'upload',
-            ActiveRecord::EVENT_BEFORE_DELETE => 'delete',
+            ActiveRecord::EVENT_BEFORE_INSERT => 'beforeUpload',
+            ActiveRecord::EVENT_BEFORE_UPDATE => 'beforeUpload',
+            ActiveRecord::EVENT_BEFORE_DELETE => 'beforeDelete',
         ];
     }
 
-    public function upload()
+    public function beforeUpload()
     {
-        if ($uploadImage = UploadedFile::getInstance($this->owner, $this->attribute)) {
+        if (count($this->attributes)) {
+            foreach ($this->attributes as $attribute) {
+                $this->upload($attribute);
+            }
+        } else {
+            $this->upload($this->attribute);
+        }
+    }
+
+    public function upload($attribute)
+    {
+        if ($uploadImage = UploadedFile::getInstance($this->owner, $attribute)) {
             if (!$this->owner->isNewRecord) {
-                $this->delete();
+                $this->delete($attribute);
             }
 
             $croppingFileName = md5($uploadImage->name . $this->quality . filemtime($uploadImage->tempName));
@@ -72,7 +88,7 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
 
             $croppingFile = $croppingFilePath . DIRECTORY_SEPARATOR . $croppingFileName . $croppingFileExt;
 
-            $cropping = $_POST[$this->attribute . '-cropping'];
+            $cropping = $_POST[$attribute . '-cropping'];
 
             $imageTmp = Image::getImagine()->open($uploadImage->tempName);
             $imageTmp->rotate($cropping['dataRotate']);
@@ -86,21 +102,32 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
             $image->crop($point, $box);
             $image->save($croppingFile, ['quality' => $this->quality]);
 
-            $this->owner->{$this->attribute} = $this->baseDir . DIRECTORY_SEPARATOR . $croppingFileDir
+            $this->owner->{$attribute} = $this->baseDir . DIRECTORY_SEPARATOR . $croppingFileDir
                 . DIRECTORY_SEPARATOR . $croppingFileName . $croppingFileExt;
-        } elseif (isset($_POST[$this->attribute . '-remove']) && $_POST[$this->attribute . '-remove']) {
-            $this->delete();
-        } elseif (isset($this->owner->oldAttributes[$this->attribute])) {
-            $this->owner->{$this->attribute} = $this->owner->oldAttributes[$this->attribute];
+        } elseif (isset($_POST[$attribute . '-remove']) && $_POST[$attribute . '-remove']) {
+            $this->delete($attribute);
+        } elseif (isset($this->owner->oldAttributes[$attribute])) {
+            $this->owner->{$attribute} = $this->owner->oldAttributes[$attribute];
         }
     }
 
-    public function delete()
+    public function beforeDelete()
     {
-        $file = Yii::getAlias($this->basePath) . $this->owner->oldAttributes[$this->attribute];
+        if (count($this->attributes)) {
+            foreach ($this->attributes as $attribute) {
+                $this->delete($attribute);
+            }
+        } else {
+            $this->delete($this->attribute);
+        }
+    }
+
+    public function delete($attribute)
+    {
+        $file = Yii::getAlias($this->basePath) . $this->owner->oldAttributes[$attribute];
 
         if (is_file($file) && file_exists($file)) {
-            unlink(Yii::getAlias($this->basePath) . $this->owner->oldAttributes[$this->attribute]);
+            unlink(Yii::getAlias($this->basePath) . $this->owner->oldAttributes[$attribute]);
         }
     }
 }

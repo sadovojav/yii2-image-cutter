@@ -9,8 +9,8 @@ $.fn.cutter = function (options) {
 
     var $cutter = $('#' + $inputField + '-cutter');
     var $modal = $cutter.find('.modal');
-    var $imageContainer = $cutter.find(".image-container");
-    var $imageID = $imageContainer.find("img").attr('id');
+    var $imageContainer = $cutter.find('.image-container');
+    var $imageID = $imageContainer.find('img').attr('id');
     var $previewPane = $cutter.find('.preview-pane');
     var $preview = $cutter.find('.preview-image');
 
@@ -34,6 +34,10 @@ $.fn.cutter = function (options) {
         var data = $(this).data(),
             $target,
             result;
+
+        var $modal = $(this).closest('.modal');
+        var $imageContainer = $modal.find('.image-container');
+        var $imageID = $imageContainer.find('img').attr('id');
 
         if (data.method) {
             data = $.extend({}, data);
@@ -66,6 +70,8 @@ $.fn.cutter = function (options) {
             }
 
             result = $('#' + $imageID).cropper(data.method, data.option);
+
+            console.log($imageID);
 
             if ($.isPlainObject(result) && $target) {
                 try {
