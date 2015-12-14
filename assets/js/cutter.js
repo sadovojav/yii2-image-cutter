@@ -30,7 +30,7 @@ $.fn.cutter = function (options) {
         }
     };
 
-    $(document.body).on('click', '[data-method]', function () {
+    $cutter.on('click', '[data-method]', function () {
         var data = $(this).data(),
             $target,
             result;
@@ -47,7 +47,7 @@ $.fn.cutter = function (options) {
 
                 if (typeof data.option === 'undefined') {
                     if (data.method == 'setAspectRatio') {
-                        var targetVal = $target.val().replace("/\D\/+/g","");
+                        var targetVal = $target.val().replace("/\D\/+/g", "");
                         var split = targetVal.split('/');
 
                         if (split.length == 2) {
