@@ -30,7 +30,8 @@ or add ```"sadovojav/yii2-image-cutter": "dev-master"``` to the require section 
         return [
             'image' => [
                 'class' => CutterBehavior::className(),
-                'attribute' => 'image',
+                'attributes' => 'image',
+                // 'attributes' => ['image1', 'image2'],
                 'baseDir' => '/uploads/crop',
                 'basePath' => '@webroot',
             ],
@@ -46,7 +47,7 @@ or add ```"sadovojav/yii2-image-cutter": "dev-master"``` to the require section 
 ```
 
 #### Parameters
-- integer `attribute` required - Image attribute
+- integer `attributes` required (string/array) - Image attributes
 - integer `baseDir` required - Base directory
 - integer `basePath` required - Base path
 - integer `quality` =  `92` - Crop result quality
@@ -88,5 +89,5 @@ or
 * imageOptions (array) (optional)
 > List with options that will be added to the image field that will be used to define the crop data in the modal. The format should be ['option' => 'value'].
 
-* jcropOptions (array) (optional)
+* cropperOptions (array) (optional)
 > List with options that will be added in javaScript while creating the crop object. For more information about which options can be added you can [read this web](https://github.com/fengyuanchen/cropper#options).

@@ -4,7 +4,7 @@ $.fn.cutter = function (options) {
     var $uploadField = $(this);
 
     var $inputField = options['inputField'];
-    var $jcropOptions = options['jcropOptions'];
+    var $cropperOptions = options['cropperOptions'];
     var $useWindowHeight = options['useWindowHeight'];
 
     var $cutter = $('#' + $inputField + '-cutter');
@@ -20,7 +20,7 @@ $.fn.cutter = function (options) {
         $dataWidth = $('#' + $inputField + '-dataWidth'),
         $dataRotate = $('#' + $inputField + '-dataRotate');
 
-    var $defaultJcropOptions = {
+    var $defaultCropperOptions = {
         crop: function (data) {
             $dataX.val(Math.round(data.x));
             $dataY.val(Math.round(data.y));
@@ -158,7 +158,7 @@ $.fn.cutter = function (options) {
                 height: size.height + 'px'
             });
 
-            var options = $.extend({}, $jcropOptions, $defaultJcropOptions);
+            var options = $.extend({}, $cropperOptions, $defaultCropperOptions);
 
             $('#' + $imageID).cropper(options);
         });

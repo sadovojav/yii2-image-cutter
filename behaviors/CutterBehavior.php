@@ -3,6 +3,7 @@
 namespace sadovojav\cutter\behaviors;
 
 use Yii;
+use yii\helpers\Json;
 use yii\imagine\Image;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
@@ -16,33 +17,29 @@ use yii\web\UploadedFile;
 class CutterBehavior extends \yii\behaviors\AttributeBehavior
 {
     /**
+     * Attributes
      * @var
      */
-    public $attribute = null;
+    public $attributes;
 
     /**
-     * @var
-     */
-    public $attributes = [];
-
-    /**
+     * Base directory
      * @var
      */
     public $baseDir;
 
     /**
+     * Base path
      * @var
      */
     public $basePath;
 
     /**
+     * Image cut quality
      * @var int
      */
     public $quality = 92;
 
-    /**
-     * @return array
-     */
     public function events()
     {
         return [
@@ -54,12 +51,12 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
 
     public function beforeUpload()
     {
-        if (count($this->attributes)) {
+        if (is_array($this->attributes) && count($this->attributes)) {
             foreach ($this->attributes as $attribute) {
                 $this->upload($attribute);
             }
         } else {
-            $this->upload($this->attribute);
+            $this->upload($this->attributes);
         }
     }
 
@@ -70,7 +67,9 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
                 $this->delete($attribute);
             }
 
-            $croppingFileName = md5($uploadImage->name . $this->quality . filemtime($uploadImage->tempName));
+            $cropping = $_POST[$attribute . '-cropping'];
+
+            $croppingFileName = md5($uploadImage->name . $this->quality . Json::encode($cropping));
             $croppingFileExt = strrchr($uploadImage->name, '.');
             $croppingFileDir = substr($croppingFileName, 0, 2);
 
@@ -87,8 +86,6 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
             }
 
             $croppingFile = $croppingFilePath . DIRECTORY_SEPARATOR . $croppingFileName . $croppingFileExt;
-
-            $cropping = $_POST[$attribute . '-cropping'];
 
             $imageTmp = Image::getImagine()->open($uploadImage->tempName);
             $imageTmp->rotate($cropping['dataRotate']);
@@ -113,12 +110,12 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
 
     public function beforeDelete()
     {
-        if (count($this->attributes)) {
+        if (is_array($this->attributes) && count($this->attributes)) {
             foreach ($this->attributes as $attribute) {
                 $this->delete($attribute);
             }
         } else {
-            $this->delete($this->attribute);
+            $this->delete($this->attributes);
         }
     }
 
