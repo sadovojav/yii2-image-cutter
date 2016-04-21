@@ -1,6 +1,8 @@
 $.fn.cutter = function (options) {
     'use strict';
 
+    var $cropped = false;
+
     var $uploadField = $(this);
 
     var $inputField = options['inputField'];
@@ -11,7 +13,6 @@ $.fn.cutter = function (options) {
     var $modal = $cutter.find('.modal');
     var $imageContainer = $cutter.find('.image-container');
     var $imageID = $imageContainer.find('img').attr('id');
-    var $previewPane = $cutter.find('.preview-pane');
     var $preview = $cutter.find('.preview-image');
 
     var $dataX = $('#' + $inputField + '-dataX'),
@@ -101,47 +102,41 @@ $.fn.cutter = function (options) {
     });
 
     $('#' + $imageID + '_button_accept').on('click', function () {
-        var cropped = false;
-
         var data = $('#' + $imageID).cropper('getData');
 
         $.each(data, function () {
             if (this != 0) {
-                cropped = true;
+                $cropped = true;
             }
         });
 
-        if (!cropped) {
-            $preview.prop('src', $('#' + $imageID).prop('src'));
-        } else {
+        if ($cropped) {
             var canvas = $('#' + $imageID).cropper('getCroppedCanvas');
             var dataURL = canvas.toDataURL();
 
             $preview.prop('src', dataURL);
         }
 
-        $previewPane.show();
-
-        remove();
-
         $modal.modal('hide');
     });
 
     $('#' + $imageID + '_button_cancel').on('click', function () {
-        remove();
-
         $modal.modal('hide');
     });
 
-    $modal.on('hidden.bs.modal', function (a) {
-        remove();
-    });
+    $modal.on('hidden.bs.modal', function () {
+        if (!$cropped) {
+            $preview.prop('src', $('#' + $imageID).prop('src'));
+            $preview.attr('src', '');
+            $('#' + $inputField).replaceWith($('#' + $inputField).val('').clone(true));
+        }
 
-    function remove() {
+        $cropped = false;
+
         $imageContainer.find(".cropper-container").remove();
 
         $('#' + $imageID).removeAttr("src").removeAttr("style").removeClass("cropper-hidden");
-    }
+    });
 
     function fileOnload(e) {
         var imageField = $imageContainer.find('img').prop('outerHTML');

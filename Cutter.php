@@ -46,8 +46,6 @@ class Cutter extends \yii\widgets\InputWidget
     {
         parent::init();
 
-        $this->registerTranslations();
-
         $this->cropperOptions = array_merge($this->cropperOptions, $this->defaultCropperOptions);
     }
 
@@ -63,28 +61,25 @@ class Cutter extends \yii\widgets\InputWidget
 
         $inputField = Html::getInputId($this->model, $this->attribute);
 
-        echo Html::beginTag('div', ['id' => $inputField . '-cutter']);
+        echo Html::beginTag('div', ['class' => 'image-cutter', 'id' => $inputField . '-cutter']);
         echo Html::activeFileInput($this->model, $this->attribute);
 
-        echo Html::beginTag('div', [
-            'class' => 'preview-pane',
-            'style' => $this->model->{$this->attribute} ? 'display:block' : 'display:none'
+        $previewImage = Html::tag('span', Yii::t('sadovojav/cutter/cutter', 'Click to upload image'));
+        $previewImage .= Html::img($this->model->{$this->attribute} ? $this->model->{$this->attribute} : null, [
+            'class' => 'preview-image',
         ]);
 
-        echo Html::beginTag('div', ['class' => 'preview-container']);
-        echo Html::img($this->model->{$this->attribute} ? $this->model->{$this->attribute} : null, [
-            'class' => 'preview-image img-responsive',
+        echo Html::label($previewImage, Html::getInputId($this->model, $this->attribute), [
+            'class' => 'dropzone'
         ]);
-        echo Html::endTag('div');
-        echo Html::endTag('div');
 
         echo Html::checkbox($this->attribute . '-remove', false, [
-            'label' => Yii::t('sadovojav/cutter/cutter', 'REMOVE')
+            'label' => Yii::t('sadovojav/cutter/cutter', 'Remove')
         ]);
 
         Modal::begin([
-            'header' => Html::tag('h4', Yii::t('sadovojav/cutter/cutter', 'CUTTER')),
-            'closeButton' => [],
+            'header' => Html::tag('h4', Yii::t('sadovojav/cutter/cutter', 'Cutter'), ['class' => 'modal-title']),
+            'closeButton' => false,
             'footer' => $this->getModalFooter($inputField),
             'size' => Modal::SIZE_LARGE,
         ]);
@@ -97,32 +92,32 @@ class Cutter extends \yii\widgets\InputWidget
 
         echo Html::beginTag('div', ['class' => 'row']);
         echo Html::beginTag('div', ['class' => 'col-md-2']);
-        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'ASPECT_RATIO'), $inputField . '-aspectRatio');
+        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Aspect ratio'), $inputField . '-aspectRatio');
         echo Html::textInput($this->attribute . '-aspectRatio', isset($this->cropperOptions['aspectRatio']) ? $this->cropperOptions['aspectRatio'] : 0, ['id' => $inputField . '-aspectRatio', 'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
-        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'ANGLE'), $inputField . '-dataRotate');
+        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Angle'), $inputField . '-dataRotate');
         echo Html::textInput($this->attribute . '-cropping[dataRotate]', '', ['id' => $inputField . '-dataRotate', 'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
-        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'POSITION') . ' (X)', $inputField . '-dataX');
+        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Position') . ' (x)', $inputField . '-dataX');
         echo Html::textInput($this->attribute . '-cropping[dataX]', '', ['id' => $inputField . '-dataX', 'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
-        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'POSITION') . ' (Y)', $inputField . '-dataY');
+        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Position') . ' (y)', $inputField . '-dataY');
         echo Html::textInput($this->attribute . '-cropping[dataY]', '', ['id' => $inputField . '-dataY', 'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
-        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'WIDTH'), $inputField . '-dataWidth');
+        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Width'), $inputField . '-dataWidth');
         echo Html::textInput($this->attribute . '-cropping[dataWidth]', '', ['id' => $inputField . '-dataWidth', 'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
-        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'HEIGHT'), $inputField . '-dataHeight');
+        echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Height'), $inputField . '-dataHeight');
         echo Html::textInput($this->attribute . '-cropping[dataHeight]', '', ['id' => $inputField . '-dataHeight', 'class' => 'form-control']);
         echo Html::endTag('div');
         echo Html::endTag('div');
@@ -173,7 +168,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'data-method' => 'setDragMode',
                         'data-option' => 'move',
                         'class' => 'btn btn-primary',
-                        'title' => Yii::t('sadovojav/cutter/cutter', 'DRAG_MODE_MOVE'),
+                        'title' => Yii::t('sadovojav/cutter/cutter', 'Drag mode "move"'),
                     ]
                 ],
                 [
@@ -183,7 +178,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'data-method' => 'setDragMode',
                         'data-option' => 'crop',
                         'class' => 'btn btn-primary',
-                        'data-title' => Yii::t('sadovojav/cutter/cutter', 'DRAG_MODE_CROP'),
+                        'data-title' => Yii::t('sadovojav/cutter/cutter', 'Drag mode "crop"'),
                     ]
                 ],
             ],
@@ -200,7 +195,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'type' => 'button',
                         'data-method' => 'crop',
                         'class' => 'btn btn-primary',
-                        'data-title' => Yii::t('sadovojav/cutter/cutter', 'CROP'),
+                        'data-title' => Yii::t('sadovojav/cutter/cutter', 'Crop'),
                     ]
                 ],
                 [
@@ -209,7 +204,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'type' => 'button',
                         'data-method' => 'reset',
                         'class' => 'btn btn-primary',
-                        'title' => Yii::t('sadovojav/cutter/cutter', 'REFRESH'),
+                        'title' => Yii::t('sadovojav/cutter/cutter', 'Refresh'),
                     ]
                 ],
                 [
@@ -218,7 +213,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'type' => 'button',
                         'data-method' => 'clear',
                         'class' => 'btn btn-primary',
-                        'title' => Yii::t('sadovojav/cutter/cutter', 'REMOVE'),
+                        'title' => Yii::t('sadovojav/cutter/cutter', 'Remove'),
                     ]
                 ],
             ],
@@ -236,7 +231,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'data-method' => 'zoom',
                         'data-option' => '0.1',
                         'class' => 'btn btn-primary',
-                        'title' => Yii::t('sadovojav/cutter/cutter', 'ZOOM_IN'),
+                        'title' => Yii::t('sadovojav/cutter/cutter', 'Zoom In'),
                     ],
                     'visible' => $this->cropperOptions['zoomable']
                 ],
@@ -247,7 +242,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'data-method' => 'zoom',
                         'data-option' => '-0.1',
                         'class' => 'btn btn-primary',
-                        'title' => Yii::t('sadovojav/cutter/cutter', 'ZOOM_OUT'),
+                        'title' => Yii::t('sadovojav/cutter/cutter', 'Zoom Out'),
                     ],
                     'visible' => $this->cropperOptions['zoomable']
                 ],
@@ -258,7 +253,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'data-method' => 'rotate',
                         'data-option' => '45',
                         'class' => 'btn btn-primary',
-                        'title' => Yii::t('sadovojav/cutter/cutter', 'ROTATE_LEFT'),
+                        'title' => Yii::t('sadovojav/cutter/cutter', 'Rotate left'),
                     ],
                     'visible' => $this->cropperOptions['rotatable']
                 ],
@@ -269,7 +264,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'data-method' => 'rotate',
                         'data-option' => '-45',
                         'class' => 'btn btn-primary',
-                        'title' => Yii::t('sadovojav/cutter/cutter', 'ROTATE_RIGHT'),
+                        'title' => Yii::t('sadovojav/cutter/cutter', 'Rotate right'),
                     ],
                     'visible' => $this->cropperOptions['rotatable']
                 ],
@@ -288,7 +283,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'data-method' => 'setAspectRatio',
                         'data-target' => '#' . $inputField . '-aspectRatio',
                         'class' => 'btn btn-primary',
-                        'title' => Yii::t('sadovojav/cutter/cutter', 'SET_ASPECT_RATIO'),
+                        'title' => Yii::t('sadovojav/cutter/cutter', 'Set aspect ratio'),
                     ]
                 ],
                 [
@@ -297,7 +292,7 @@ class Cutter extends \yii\widgets\InputWidget
                         'type' => 'button',
                         'data-method' => 'setData',
                         'class' => 'btn btn-primary',
-                        'title' => Yii::t('sadovojav/cutter/cutter', 'SET_DATA'),
+                        'title' => Yii::t('sadovojav/cutter/cutter', 'Set data'),
                     ]
                 ],
             ],
@@ -306,9 +301,9 @@ class Cutter extends \yii\widgets\InputWidget
             ]
         ]) .
         Html::endTag('div') .
-        Html::button(Yii::t('sadovojav/cutter/cutter', 'CANCEL'), [
+        Html::button(Yii::t('sadovojav/cutter/cutter', 'Cancel'), [
             'id' => $this->imageOptions['id'] . '_button_cancel', 'class' => 'btn btn-danger'
-        ]) . Html::button(Yii::t('sadovojav/cutter/cutter', 'ACCEPT'), [
+        ]) . Html::button(Yii::t('sadovojav/cutter/cutter', 'Accept'), [
             'id' => $this->imageOptions['id'] . '_button_accept', 'class' => 'btn btn-success'
         ]);
     }

@@ -26,5 +26,8 @@
     "psr-4": {
       "sadovojav\\cutter\\": ""
     }
+  },
+  "extra": {
+    "bootstrap": "sadovojav\\cutter\\Bootstrap"
   }
 }
