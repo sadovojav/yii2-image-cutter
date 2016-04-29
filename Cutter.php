@@ -42,9 +42,15 @@ class Cutter extends \yii\widgets\InputWidget
         'movable' => true,
     ];
 
+    private $view;
+
     public function init()
     {
         parent::init();
+
+        $this->view = $this->getView();
+
+        AssetBundle::register($this->view);
 
         $this->cropperOptions = array_merge($this->cropperOptions, $this->defaultCropperOptions);
     }
@@ -126,10 +132,6 @@ class Cutter extends \yii\widgets\InputWidget
 
         echo Html::endTag('div');
 
-        $view = $this->getView();
-
-        CutterAsset::register($view);
-
         $options = [
             'inputField' => $inputField,
             'useWindowHeight' => $this->useWindowHeight,
@@ -138,7 +140,7 @@ class Cutter extends \yii\widgets\InputWidget
 
         $options = Json::encode($options);
 
-        $view->registerJs('jQuery("#' . $inputField . '").cutter(' . $options . ');');
+        $this->view->registerJs('jQuery("#' . $inputField . '").cutter(' . $options . ');');
     }
 
     public function registerTranslations()

@@ -3,10 +3,10 @@
 namespace sadovojav\cutter;
 
 /**
- * Class CutterAsset
+ * Class AssetBundle
  * @package sadovojav\cutter
  */
-class CutterAsset extends \yii\web\AssetBundle
+class AssetBundle extends \yii\web\AssetBundle
 {
     public $depends = [
         'yii\web\JqueryAsset'
