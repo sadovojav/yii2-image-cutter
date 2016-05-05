@@ -70,13 +70,16 @@ class Cutter extends \yii\widgets\InputWidget
         echo Html::beginTag('div', ['class' => 'image-cutter', 'id' => $inputField . '-cutter']);
         echo Html::activeFileInput($this->model, $this->attribute);
 
-        $previewImage = Html::tag('span', Yii::t('sadovojav/cutter/cutter', 'Click to upload image'));
+        $previewImage = Html::tag('div', null, ['class' => 'dummy']);;
+        $previewImage .= Html::beginTag('div', ['class' => 'img-container']);
+        $previewImage .= Html::tag('span', Yii::t('sadovojav/cutter/cutter', 'Click to upload image'));
         $previewImage .= Html::img($this->model->{$this->attribute} ? $this->model->{$this->attribute} : null, [
             'class' => 'preview-image',
         ]);
+        $previewImage .= Html::endTag('div');
 
         echo Html::label($previewImage, Html::getInputId($this->model, $this->attribute), [
-            'class' => 'dropzone'
+            'class' => 'dropzone',
         ]);
 
         echo Html::checkbox($this->attribute . '-remove', false, [
