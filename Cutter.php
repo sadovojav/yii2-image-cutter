@@ -66,13 +66,16 @@ class Cutter extends \yii\widgets\InputWidget
         $this->imageOptions['id'] = Yii::$app->getSecurity()->generateRandomString(10);
 
         $inputField = Html::getInputId($this->model, $this->attribute);
+        $class = \yii\helpers\StringHelper::basename(get_class($this->model)) . 'Cutter';
 
         echo Html::beginTag('div', ['class' => 'image-cutter', 'id' => $inputField . '-cutter']);
         echo Html::activeFileInput($this->model, $this->attribute);
+        echo Html::hiddenInput($class . '[' . $this->attribute . ']', $this->model->{$this->attribute});
 
-        $previewImage = Html::tag('div', null, ['class' => 'dummy']);;
-        $previewImage .= Html::beginTag('div', ['class' => 'img-container']);
-        $previewImage .= Html::tag('span', Yii::t('sadovojav/cutter/cutter', 'Click to upload image'));
+        $previewImage = Html::beginTag('div', ['class' => 'img-container']);
+        $previewImage .= Html::tag('span', Yii::t('sadovojav/cutter/cutter', 'Click to upload image'), [
+            'class' => 'message'
+        ]);
         $previewImage .= Html::img($this->model->{$this->attribute} ? $this->model->{$this->attribute} : null, [
             'class' => 'preview-image',
         ]);
@@ -82,7 +85,7 @@ class Cutter extends \yii\widgets\InputWidget
             'class' => 'dropzone',
         ]);
 
-        echo Html::checkbox($this->attribute . '-remove', false, [
+        echo Html::checkbox($class . '[' . $this->attribute . '-remove]', false, [
             'label' => Yii::t('sadovojav/cutter/cutter', 'Remove')
         ]);
 
@@ -102,32 +105,40 @@ class Cutter extends \yii\widgets\InputWidget
         echo Html::beginTag('div', ['class' => 'row']);
         echo Html::beginTag('div', ['class' => 'col-md-2']);
         echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Aspect ratio'), $inputField . '-aspectRatio');
-        echo Html::textInput($this->attribute . '-aspectRatio', isset($this->cropperOptions['aspectRatio']) ? $this->cropperOptions['aspectRatio'] : 0, ['id' => $inputField . '-aspectRatio', 'class' => 'form-control']);
+        echo Html::textInput($class . '[' . $this->attribute . '-aspectRatio]', isset($this->cropperOptions['aspectRatio']) ?
+            $this->cropperOptions['aspectRatio'] : 0, ['id' => $inputField . '-aspectRatio', 'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
         echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Angle'), $inputField . '-dataRotate');
-        echo Html::textInput($this->attribute . '-cropping[dataRotate]', '', ['id' => $inputField . '-dataRotate', 'class' => 'form-control']);
+        echo Html::textInput($class . '[' . $this->attribute . '-cropping][dataRotate]', '', ['id' => $inputField .
+            '-dataRotate', 'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
         echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Position') . ' (x)', $inputField . '-dataX');
-        echo Html::textInput($this->attribute . '-cropping[dataX]', '', ['id' => $inputField . '-dataX', 'class' => 'form-control']);
+        echo Html::textInput($class . '[' . $this->attribute . '-cropping][dataX]', '', ['id' => $inputField .
+            '-dataX',
+            'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
         echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Position') . ' (y)', $inputField . '-dataY');
-        echo Html::textInput($this->attribute . '-cropping[dataY]', '', ['id' => $inputField . '-dataY', 'class' => 'form-control']);
+        echo Html::textInput($class . '[' . $this->attribute . '-cropping][dataY]', '', ['id' => $inputField .
+            '-dataY',
+            'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
         echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Width'), $inputField . '-dataWidth');
-        echo Html::textInput($this->attribute . '-cropping[dataWidth]', '', ['id' => $inputField . '-dataWidth', 'class' => 'form-control']);
+        echo Html::textInput($class . '[' . $this->attribute . '-cropping][dataWidth]', '', ['id' => $inputField .
+            '-dataWidth', 'class' => 'form-control']);
         echo Html::endTag('div');
 
         echo Html::beginTag('div', ['class' => 'col-md-2']);
         echo Html::label(Yii::t('sadovojav/cutter/cutter', 'Height'), $inputField . '-dataHeight');
-        echo Html::textInput($this->attribute . '-cropping[dataHeight]', '', ['id' => $inputField . '-dataHeight', 'class' => 'form-control']);
+        echo Html::textInput($class . '[' . $this->attribute . '-cropping][dataHeight]', '', ['id' => $inputField .
+            '-dataHeight', 'class' => 'form-control']);
         echo Html::endTag('div');
         echo Html::endTag('div');
 

@@ -62,12 +62,14 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
 
     public function upload($attribute)
     {
+        $class = \yii\helpers\StringHelper::basename(get_class($this->owner)) . 'Cutter';
+
         if ($uploadImage = UploadedFile::getInstance($this->owner, $attribute)) {
             if (!$this->owner->isNewRecord) {
                 $this->delete($attribute);
             }
 
-            $cropping = $_POST[$attribute . '-cropping'];
+            $cropping = $_POST[$class][$attribute . '-cropping'];
 
             $croppingFileName = md5($uploadImage->name . $this->quality . Json::encode($cropping));
             $croppingFileExt = strrchr($uploadImage->name, '.');
@@ -101,8 +103,10 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
 
             $this->owner->{$attribute} = $this->baseDir . DIRECTORY_SEPARATOR . $croppingFileDir
                 . DIRECTORY_SEPARATOR . $croppingFileName . $croppingFileExt;
-        } elseif (isset($_POST[$attribute . '-remove']) && $_POST[$attribute . '-remove']) {
+        } elseif (isset($_POST[$class][$attribute . '-remove']) && $_POST[$class][$attribute . '-remove']) {
             $this->delete($attribute);
+        } elseif (!empty($_POST[$class][$attribute])) {
+            $this->owner->{$attribute} = $_POST[$class][$attribute];
         } elseif (isset($this->owner->oldAttributes[$attribute])) {
             $this->owner->{$attribute} = $this->owner->oldAttributes[$attribute];
         }
