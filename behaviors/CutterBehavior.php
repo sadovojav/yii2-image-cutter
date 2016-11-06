@@ -9,6 +9,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
+use Imagine\Image\Palette\RGB;
 
 /**
  * Class CutterBehavior
@@ -87,19 +88,18 @@ class CutterBehavior extends \yii\behaviors\AttributeBehavior
                 mkdir($croppingFilePath, 0755, true);
             }
 
-            $croppingFile = $croppingFilePath . DIRECTORY_SEPARATOR . $croppingFileName . $croppingFileExt;
-
-            $imageTmp = Image::getImagine()->open($uploadImage->tempName);
-            $imageTmp->rotate($cropping['dataRotate']);
-
-            $image = Image::getImagine()->create($imageTmp->getSize());
-            $image->paste($imageTmp, new Point(0, 0));
+            $fileSavePath = $croppingFilePath . DIRECTORY_SEPARATOR . $croppingFileName . $croppingFileExt;
 
             $point = new Point($cropping['dataX'], $cropping['dataY']);
             $box = new Box($cropping['dataWidth'], $cropping['dataHeight']);
 
-            $image->crop($point, $box);
-            $image->save($croppingFile, ['quality' => $this->quality]);
+            $palette = new \Imagine\Image\Palette\RGB();
+            $color = $palette->color('fff', 0);
+
+            Image::frame($uploadImage->tempName, 0, 'fff', 0)
+                ->rotate($cropping['dataRotate'], $color)
+                ->crop($point, $box)
+                ->save($fileSavePath, ['quality' => $this->quality]);
 
             $this->owner->{$attribute} = $this->baseDir . DIRECTORY_SEPARATOR . $croppingFileDir
                 . DIRECTORY_SEPARATOR . $croppingFileName . $croppingFileExt;
