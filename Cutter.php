@@ -73,6 +73,7 @@ class Cutter extends \yii\widgets\InputWidget
         echo Html::hiddenInput($class . '[' . $this->attribute . ']', $this->model->{$this->attribute});
 
         $previewImage = Html::beginTag('div', ['class' => 'img-container']);
+        $previewImage .= Html::tag('span', '', ['class' => 'helper']);
         $previewImage .= Html::tag('span', Yii::t('sadovojav/cutter/cutter', 'Click to upload image'), [
             'class' => 'message'
         ]);

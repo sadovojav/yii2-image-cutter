@@ -27,8 +27,14 @@
     padding: 1px;
 }
 
+.image-cutter .dropzone .img-container .helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
 .image-cutter .dropzone .img-container .message {
-    color: #646C7F;
+    color: #333;
     font-size: 20px;
     text-align: center;
     font-weight: 400;
@@ -43,4 +49,5 @@
     max-height: 100%;
     max-width: 100%;
     width: 100%;
+    vertical-align: middle;
 }
