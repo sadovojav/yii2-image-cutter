@@ -22,15 +22,9 @@
     width: 100%;
     cursor: pointer;
     display: flex;
-    text-align: center;
-    position: relative;
+    justify-content: center;
+    align-items: center;
     padding: 1px;
-}
-
-.image-cutter .dropzone .img-container .helper {
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
 }
 
 .image-cutter .dropzone .img-container .message {
@@ -42,6 +36,7 @@
     width: 100%;
     padding: 0 5%;
     top: 50%;
+    left: 0;
     margin-top: -36px;
 }
 
