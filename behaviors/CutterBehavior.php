@@ -9,7 +9,6 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
-use Imagine\Image\Palette\RGB;
 
 /**
  * Class CutterBehavior
