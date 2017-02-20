@@ -20,6 +20,11 @@ class Cutter extends \yii\widgets\InputWidget
      */
     public $imageOptions;
 
+    /***
+     * Image preview text
+     */
+    public $previewText = null;
+
     /**
      * Use the height of the current window for the form image cropping
      * @var bool
@@ -50,9 +55,9 @@ class Cutter extends \yii\widgets\InputWidget
 
         $this->view = $this->getView();
 
-        AssetBundle::register($this->view);
-
         $this->cropperOptions = array_merge($this->cropperOptions, $this->defaultCropperOptions);
+
+        AssetBundle::register($this->view);
     }
 
     public function run()
@@ -73,7 +78,10 @@ class Cutter extends \yii\widgets\InputWidget
         echo Html::hiddenInput($class . '[' . $this->attribute . ']', $this->model->{$this->attribute});
 
         $previewImage = Html::beginTag('div', ['class' => 'img-container']);
-        $previewImage .= Html::tag('span', Yii::t('sadovojav/cutter/cutter', 'Click to upload image'), [
+
+        $previewText = !is_null($this->previewText) ? $this->previewText : Yii::t('sadovojav/cutter/cutter', 'Click to upload image');
+
+        $previewImage .= Html::tag('span', $previewText, [
             'class' => 'message'
         ]);
         $previewImage .= Html::img($this->model->{$this->attribute} ? $this->model->{$this->attribute} : null, [
